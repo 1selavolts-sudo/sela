@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+	color-scheme: light;
+}
+
+html {
+	scroll-behavior: smooth;
+}
+
+body {
+	margin: 0;
+	background: #f4f8f7;
+}
+
+@layer components {
+	.card-surface {
+		@apply rounded-[1.5rem] border border-slate-200 bg-white p-6 shadow-soft;
+	}
+}
