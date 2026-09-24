@@ -1,20 +1,48 @@
-import Link from 'next/link';
-import { ArrowRight, LockKeyhole } from 'lucide-react';
+import { ShieldCheck } from 'lucide-react';
 import { loginAction } from './actions';
 
-export default function AdminLoginPage({ searchParams }: { searchParams?: { error?: string } }) {
-	const error = searchParams?.error;
+export default function AdminLoginPage() {
+  return (
+    <main className="flex min-h-screen items-center justify-center bg-slate-100 px-4 py-12">
+      <div className="w-full max-w-md rounded-[30px] border border-slate-200 bg-white p-8 shadow-soft">
+        <div className="mb-6 flex items-center justify-center gap-3">
+          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-navy text-brand-green">
+            <ShieldCheck className="h-6 w-6" />
+          </div>
+          <div>
+            <p className="text-lg font-black tracking-tight text-brand-navy">SELAVOLT</p>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-brand-cyan">CONTROL CENTER</p>
+          </div>
+        </div>
 
-	return (
-		<main className="flex min-h-screen items-center justify-center bg-brand-navy px-4 py-12">
-			<div className="grid w-full max-w-5xl overflow-hidden rounded-[2rem] border border-white/10 bg-white shadow-2xl lg:grid-cols-[1fr_0.9fr]">
-				<div className="hidden bg-gradient-to-br from-brand-navy to-slate-800 p-12 text-white lg:block"><p className="text-sm font-semibold uppercase tracking-[0.3em] text-brand-cyan">SELAVOLT operations</p><h1 className="mt-6 text-4xl font-black leading-tight">Powering Rwanda&apos;s electric future.</h1><p className="mt-5 max-w-md text-slate-300">Manage charging stations, sessions, customers, payments, and network performance from one secure workspace.</p><div className="mt-16 flex items-center gap-3 text-sm text-slate-300"><ActivityIcon /> Live network control</div></div>
-				<div className="p-7 sm:p-12"><Link href="/" className="text-sm font-semibold text-brand-navy">SELAVOLT</Link><div className="mt-12"><div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-green/20 text-brand-navy"><LockKeyhole className="h-6 w-6" /></div><h2 className="mt-6 text-3xl font-black text-brand-navy">Admin sign in</h2><p className="mt-2 text-slate-600">Use your operations credentials to continue.</p>{error && <p className="mt-5 rounded-xl bg-red-50 px-4 py-3 text-sm font-medium text-red-700">Invalid credentials. Demo access: admin@selavolt.rw / password123</p>}<form action={loginAction} className="mt-8 space-y-5"><label className="block text-sm font-semibold text-brand-navy">Email<input name="email" type="email" required className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-brand-cyan" placeholder="admin@selavolt.rw" /></label><label className="block text-sm font-semibold text-brand-navy">Password<input name="password" type="password" required className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-brand-cyan" placeholder="••••••••" /></label><button className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand-green px-4 py-3 font-bold text-brand-navy">Sign in <ArrowRight className="h-4 w-4" /></button></form></div></div>
-			</div>
-		</main>
-	);
-}
+        <div className="mb-6">
+          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-cyan">Secure access</p>
+          <h1 className="mt-3 text-3xl font-black text-brand-navy">Admin login</h1>
+        </div>
 
-function ActivityIcon() {
-	return <span className="inline-flex h-2.5 w-2.5 rounded-full bg-brand-green" />;
+        <form action={loginAction} className="space-y-5">
+          <div>
+            <label className="mb-2 block text-sm font-medium text-slate-700">Email</label>
+            <input name="email" type="email" defaultValue="admin@selavolt.rw" className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none focus:border-brand-cyan" />
+          </div>
+          <div>
+            <label className="mb-2 block text-sm font-medium text-slate-700">Password</label>
+            <input name="password" type="password" defaultValue="password123" className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none focus:border-brand-cyan" />
+          </div>
+
+          <div className="flex items-center justify-between text-sm">
+            <a href="/admin/forgot-password" className="font-medium text-brand-navy">Forgot password?</a>
+            <span className="rounded-full bg-amber-100 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-amber-700">DEMO</span>
+          </div>
+
+          <button
+            type="submit"
+            className="w-full rounded-2xl bg-brand-green px-5 py-3 text-sm font-semibold text-brand-navy shadow-lg shadow-emerald-500/20 transition-all hover:-translate-y-0.5 hover:bg-emerald-400"
+          >
+            Sign in
+          </button>
+        </form>
+      </div>
+    </main>
+  );
 }
