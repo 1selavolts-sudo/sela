@@ -18,7 +18,9 @@ export async function loginAction(formData: FormData) {
     redirect('/admin/login?error=invalid-credentials');
   }
 
-  cookies().set('selavolt_admin_session', 'authenticated', {
+  const cookieStore = await cookies();
+
+  cookieStore.set('selavolt_admin_session', 'authenticated', {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
@@ -26,7 +28,7 @@ export async function loginAction(formData: FormData) {
     maxAge: 60 * 60 * 8
   });
 
-  cookies().set('selavolt_admin_role', 'SUPER_ADMIN', {
+  cookieStore.set('selavolt_admin_role', 'SUPER_ADMIN', {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
@@ -38,7 +40,8 @@ export async function loginAction(formData: FormData) {
 }
 
 export async function logoutAction() {
-  cookies().delete('selavolt_admin_session');
-  cookies().delete('selavolt_admin_role');
+  const cookieStore = await cookies();
+  cookieStore.delete('selavolt_admin_session');
+  cookieStore.delete('selavolt_admin_role');
   redirect('/admin/login');
 }
