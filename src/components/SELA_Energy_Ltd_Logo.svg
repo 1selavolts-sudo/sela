@@ -1,0 +1,59 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420">
+  <rect width="1200" height="420" fill="#FFFFFF"/>
+
+  <defs>
+    <linearGradient id="energy" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#20C6D8"/>
+      <stop offset="100%" stop-color="#43B649"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Energy emblem -->
+  <g transform="translate(45 45)">
+    <path d="M165 4 C77 4 13 62 13 145
+      C13 214 62 258 140 273 L140 226
+      C89 214 64 187 64 147
+      C64 93 106 53 165 53
+      C204 53 236 71 254 101
+      L294 77 C267 31 220 4 165 4Z"
+      fill="#0A2342"/>
+
+    <path d="M164 316 C252 316 316 258 316 176
+      C316 107 268 63 190 48 L190 95
+      C241 108 265 135 265 175
+      C265 229 223 268 164 268
+      C125 268 93 250 75 220
+      L35 244 C62 290 109 316 164 316Z"
+      fill="#0A2342"/>
+
+    <path d="M184 76 L112 183 L163 183
+      L137 250 L224 137 L172 137Z"
+      fill="url(#energy)"/>
+
+    <path d="M24 325 H304"
+      stroke="#20C6D8" stroke-width="8"
+      stroke-linecap="round"/>
+  </g>
+
+  <!-- Company name -->
+  <g font-family="Arial, Helvetica, sans-serif">
+    <text x="405" y="198"
+      font-size="112" font-weight="800"
+      letter-spacing="5" fill="#0A2342">SELA</text>
+
+    <text x="412" y="264"
+      font-size="43" font-weight="700"
+      letter-spacing="12" fill="#20AEBF">ENERGY LTD</text>
+
+    <path d="M410 291 H1095"
+      stroke="#43B649" stroke-width="6"
+      stroke-linecap="round"/>
+
+    <text x="412" y="343"
+      font-size="25" font-weight="600"
+      letter-spacing="3.5" fill="#0A2342">
+      POWERING RWANDA FORWARD
+    </text>
+  </g>
+</svg>

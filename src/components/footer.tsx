@@ -1,11 +1,12 @@
 import Link from 'next/link';
+import Logo from './Logo';
 
 export function Footer() {
   return (
     <footer className="border-t border-slate-200 bg-brand-navy text-slate-200">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-10 sm:px-6 lg:grid-cols-4 lg:px-8">
         <div>
-          <p className="text-xl font-black text-white">SELAVOLT</p>
+          <Logo variant="dark" width="420px" height="auto" className="max-w-[420px]" />
           <p className="mt-4 text-sm text-slate-300">Powering Rwanda&apos;s Electric Future.</p>
         </div>
         <div>

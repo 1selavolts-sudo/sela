@@ -1,18 +1,12 @@
-import { ShieldCheck } from 'lucide-react';
+import Logo from '@/components/Logo';
 import { loginAction } from './actions';
 
 export default function AdminLoginPage() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-slate-100 px-4 py-12">
       <div className="w-full max-w-md rounded-[30px] border border-slate-200 bg-white p-8 shadow-soft">
-        <div className="mb-6 flex items-center justify-center gap-3">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-navy text-brand-green">
-            <ShieldCheck className="h-6 w-6" />
-          </div>
-          <div>
-            <p className="text-lg font-black tracking-tight text-brand-navy">SELAVOLT</p>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-brand-cyan">CONTROL CENTER</p>
-          </div>
+        <div className="mb-6 flex items-center justify-center">
+          <Logo variant="light" width="220px" height="auto" className="max-w-[220px]" />
         </div>
 
         <div className="mb-6">
