@@ -8,7 +8,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen bg-slate-100 text-slate-800">
       <div className="flex min-h-screen">
         <aside className="hidden w-72 flex-col bg-brand-navy text-slate-100 lg:flex">
-          <div className="flex items-center gap-3 border-b border-white/10 px-6 py-5">
+          <Link href="/admin" aria-label="Go to Control Center overview" className="flex items-center gap-3 border-b border-white/10 px-6 py-5 transition hover:bg-white/5">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-green/20 text-brand-green">
               <ShieldCheck className="h-5 w-5" />
             </div>
@@ -16,7 +16,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
               <p className="text-lg font-black tracking-tight">SELAVOLT</p>
               <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-brand-cyan">CONTROL CENTER</p>
             </div>
-          </div>
+          </Link>
 
           <nav className="flex-1 space-y-1 px-4 py-5">
             {adminNav.map((item) => (
@@ -46,7 +46,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
                 </button>
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-cyan">Operations</p>
-                  <h1 className="text-xl font-black text-brand-navy">SELAVOLT Control Center</h1>
+                  <Link href="/admin" className="text-xl font-black text-brand-navy hover:text-brand-green">SELAVOLT Control Center</Link>
                 </div>
               </div>
 
