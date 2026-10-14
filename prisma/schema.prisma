@@ -70,10 +70,23 @@ model User {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   roles         Role[]
+  passwordResetTokens PasswordResetToken[]
   customer      CustomerProfile?
   auditLogs     AuditLog[]
   notifications Notification[]
   tickets       SupportTicket[]
+}
+
+model PasswordResetToken {
+  id        String    @id @default(cuid())
+  tokenHash String    @unique
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId, expiresAt])
 }
 
 model Role {

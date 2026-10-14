@@ -1,17 +1,19 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { verifyAdminSession } from '@/lib/admin-auth';
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const isAdminRoute = pathname.startsWith('/admin');
   const isLoginRoute = pathname === '/admin/login';
-  const hasSession = request.cookies.get('selavolt_admin_session')?.value === 'authenticated';
+  const isRecoveryRoute = pathname === '/admin/forgot-password' || pathname === '/admin/reset-password';
+  const session = await verifyAdminSession(request.cookies.get('selavolt_admin_session')?.value);
 
-  if (isAdminRoute && !isLoginRoute && !hasSession) {
+  if (isAdminRoute && !isLoginRoute && !isRecoveryRoute && !session) {
     return NextResponse.redirect(new URL('/admin/login', request.url));
   }
 
-  if (isLoginRoute && hasSession) {
+  if (isLoginRoute && session) {
     return NextResponse.redirect(new URL('/admin', request.url));
   }
 
