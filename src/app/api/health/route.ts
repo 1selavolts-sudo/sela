@@ -23,7 +23,3 @@ export async function HEAD() {
   return new Response(null, { status: 200 });
 }
 
-export async function POST() {
-  const healthy = await databaseIsReachable();
-  return Response.json({ status: healthy ? 'ok' : 'degraded', database: 'postgresql' }, { status: healthy ? 200 : 503 });
-}

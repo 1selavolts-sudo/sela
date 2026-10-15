@@ -15,7 +15,9 @@ export async function submitContactAction(formData: FormData) {
 
   // The site-wide cap bounds inbox flooding even if the client IP can't be trusted.
   const hour = 60 * 60 * 1000;
-  if (hitRateLimit(`contact:ip:${await getClientIp()}`, 5, hour) || hitRateLimit('contact:all', 50, hour)) {
+  const ip = await getClientIp();
+  const ipLimited = ip !== null && hitRateLimit(`contact:ip:${ip}`, 5, hour);
+  if (ipLimited || hitRateLimit('contact:all', 50, hour)) {
     redirect('/contact?error=too-many-requests');
   }
 

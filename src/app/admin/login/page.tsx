@@ -23,12 +23,12 @@ export default async function AdminLoginPage({ searchParams }: { searchParams: P
 
         <form action={loginAction} className="space-y-5">
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-700">Email</label>
-            <input name="email" type="email" autoComplete="username" required className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none focus:border-brand-cyan" />
+            <label htmlFor="admin-login-email" className="mb-2 block text-sm font-medium text-slate-700">Email</label>
+            <input id="admin-login-email" name="email" type="email" autoComplete="username" required className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none focus:border-brand-cyan" />
           </div>
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-700">Password</label>
-            <input name="password" type="password" autoComplete="current-password" required className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none focus:border-brand-cyan" />
+            <label htmlFor="admin-login-password" className="mb-2 block text-sm font-medium text-slate-700">Password</label>
+            <input id="admin-login-password" name="password" type="password" autoComplete="current-password" required className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none focus:border-brand-cyan" />
           </div>
 
           <div className="flex items-center justify-between text-sm">

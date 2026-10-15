@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Bell, ChevronDown, LogOut, Menu, Search } from 'lucide-react';
+import { Bell, ChevronDown, LogOut, Search } from 'lucide-react';
 import { logoutAction } from '@/app/admin/login/actions';
 import { BrandLogo } from '@/components/brand-logo';
 import { canAccessAdminPath } from '@/lib/admin-access';
@@ -41,9 +41,6 @@ export function AdminShell({ session, children }: { session: AdminSession; child
           <header className="border-b border-slate-200 bg-white/80 backdrop-blur-xl">
             <div className="flex items-center justify-between gap-4 px-5 py-4 lg:px-8">
               <div className="flex items-center gap-3">
-                <button className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 lg:hidden">
-                  <Menu className="h-5 w-5 text-brand-navy" />
-                </button>
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-cyan">Operations</p>
                   <Link href="/admin" className="text-xl font-black text-brand-navy hover:text-brand-green">SELA ENERGY Control Center</Link>
@@ -81,6 +78,14 @@ export function AdminShell({ session, children }: { session: AdminSession; child
               </div>
             </div>
           </header>
+
+          <nav aria-label="Control Center sections" className="flex gap-2 overflow-x-auto border-b border-slate-200 bg-white px-4 py-3 lg:hidden">
+            {navItems.map((item) => (
+              <Link key={item.href} href={item.href} className="shrink-0 rounded-full border border-slate-200 px-3 py-1.5 text-sm font-medium text-brand-navy">
+                {item.title}
+              </Link>
+            ))}
+          </nav>
 
           <main className="p-5 lg:p-8">{children}</main>
         </div>

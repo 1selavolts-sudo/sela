@@ -17,10 +17,16 @@ export async function loginAction(formData: FormData) {
   if (!email || !password) {
     redirect('/admin/login?error=missing-credentials');
   }
+  // Long values would become long rate-limit keys, so reject them before counting.
+  if (email.length > 254) {
+    redirect('/admin/login?error=invalid-credentials');
+  }
 
   // Every attempt counts against the account; a successful login clears it.
   const accountKey = `admin-login:email:${email}`;
-  if (hitRateLimit(`admin-login:ip:${await getClientIp()}`, 30, loginWindowMs) || hitRateLimit(accountKey, 10, loginWindowMs)) {
+  const ip = await getClientIp();
+  const ipLimited = ip !== null && hitRateLimit(`admin-login:ip:${ip}`, 30, loginWindowMs);
+  if (ipLimited || hitRateLimit(accountKey, 10, loginWindowMs)) {
     redirect('/admin/login?error=too-many-attempts');
   }
 
@@ -39,9 +45,16 @@ export async function loginAction(formData: FormData) {
   }
 
   clearRateLimit(accountKey);
-  const cookieStore = await cookies();
-  const session = await createAdminSession(user.email, role);
+  let session: string;
+  try {
+    session = await createAdminSession(user.email, role);
+  } catch (error) {
+    // Usually means ADMIN_SESSION_SECRET is not set on the server.
+    console.error('Admin session could not be created:', error);
+    redirect('/admin/login?error=service-unavailable');
+  }
 
+  const cookieStore = await cookies();
   cookieStore.set(ADMIN_SESSION_COOKIE, session, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',

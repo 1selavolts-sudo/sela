@@ -21,10 +21,13 @@ export async function sendAppEmail(message: AppEmail) {
     throw new Error('SMTP is not fully configured.');
   }
 
+  const secure = process.env.SMTP_SECURE === 'true' || port === 465;
   const transporter = nodemailer.createTransport({
     host,
     port,
-    secure: process.env.SMTP_SECURE === 'true' || port === 465,
+    secure,
+    // On STARTTLS ports, never send the password unless the upgrade to TLS succeeds.
+    requireTLS: !secure,
     auth: { user, pass: password }
   });
 

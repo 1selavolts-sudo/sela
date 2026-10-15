@@ -51,7 +51,9 @@ export async function requestAdminPasswordResetAction(formData: FormData) {
     redirect('/admin/forgot-password?error=invalid-email');
   }
   // The per-email cap stops anyone from flooding an admin's inbox with reset emails.
-  if (hitRateLimit(`admin-reset:ip:${await getClientIp()}`, 5, 15 * 60 * 1000) || hitRateLimit(`admin-reset:email:${email}`, 3, 60 * 60 * 1000)) {
+  const ip = await getClientIp();
+  const ipLimited = ip !== null && hitRateLimit(`admin-reset:ip:${ip}`, 5, 15 * 60 * 1000);
+  if (ipLimited || hitRateLimit(`admin-reset:email:${email}`, 3, 60 * 60 * 1000)) {
     redirect('/admin/forgot-password?error=too-many-requests');
   }
   if (!isEmailConfigured()) {
