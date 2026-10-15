@@ -15,7 +15,7 @@ export default function LoginPage() {
           <form className="mt-8 space-y-5">
             <div>
               <label className="mb-2 block text-sm font-medium text-slate-700">Email</label>
-              <input className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none ring-0 focus:border-brand-cyan" placeholder="driver@selavolt.rw" />
+              <input className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none ring-0 focus:border-brand-cyan" placeholder="driver@example.com" />
             </div>
             <div>
               <label className="mb-2 block text-sm font-medium text-slate-700">Password</label>

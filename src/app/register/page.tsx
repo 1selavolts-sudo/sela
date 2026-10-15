@@ -9,7 +9,7 @@ export default function RegisterPage() {
       <main className="section-shell py-16">
         <div className="mx-auto max-w-xl rounded-[30px] border border-slate-200 bg-white p-8 shadow-soft">
           <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-cyan">Create account</p>
-          <h1 className="mt-3 text-3xl font-black text-brand-navy">Register with SELAVOLT</h1>
+          <h1 className="mt-3 text-3xl font-black text-brand-navy">Register with SELA ENERGY</h1>
 
           <form className="mt-8 space-y-5">
             <div className="grid gap-5 sm:grid-cols-2">

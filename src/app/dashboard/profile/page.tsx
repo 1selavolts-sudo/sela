@@ -26,7 +26,7 @@ export default function DashboardProfilePage() {
             </div>
             <div className="rounded-2xl bg-slate-50 p-4">
               <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Email</p>
-              <div className="mt-3 flex items-center gap-3 text-brand-navy"><Mail className="h-4 w-4" /> aline@selavolt.rw</div>
+              <div className="mt-3 flex items-center gap-3 text-brand-navy"><Mail className="h-4 w-4" /> aline@example.com</div>
             </div>
             <div className="rounded-2xl bg-slate-50 p-4 md:col-span-2">
               <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Preferred vehicle</p>

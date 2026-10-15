@@ -3,8 +3,8 @@ import { Bell, ChevronDown, LogOut, Search } from 'lucide-react';
 import { logoutAction } from '@/app/admin/login/actions';
 import { BrandLogo } from '@/components/brand-logo';
 import { canAccessAdminPath } from '@/lib/admin-access';
+import { adminNav } from '@/lib/admin-nav';
 import type { AdminSession } from '@/lib/admin-auth';
-import { adminNav, demoModeBanner } from '@/lib/admin-data';
 
 export function AdminShell({ session, children }: { session: AdminSession; children: React.ReactNode }) {
   const navItems = adminNav.filter((item) => canAccessAdminPath(session.role, item.href));
@@ -29,12 +29,6 @@ export function AdminShell({ session, children }: { session: AdminSession; child
               </Link>
             ))}
           </nav>
-
-          <div className="px-4 pb-5">
-            <div className="rounded-2xl border border-brand-cyan/20 bg-brand-cyan/10 p-3 text-xs uppercase tracking-[0.24em] text-brand-cyan">
-              {demoModeBanner}
-            </div>
-          </div>
         </aside>
 
         <div className="flex-1">
@@ -48,17 +42,16 @@ export function AdminShell({ session, children }: { session: AdminSession; child
               </div>
 
               <div className="hidden flex-1 items-center justify-center px-8 md:flex">
-                <div className="flex w-full max-w-xl items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2.5">
-                  <Search className="h-4 w-4 text-slate-500" />
-                  <input className="w-full bg-transparent text-sm outline-none placeholder:text-slate-500" placeholder="Search stations, customers, sessions..." />
+                <div className="flex w-full max-w-xl items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-slate-500">
+                  <Search className="h-4 w-4" />
+                  <span className="text-sm">Use the menu to find stations, chargers, sessions and customers</span>
                 </div>
               </div>
 
               <div className="flex items-center gap-3">
-                <button className="relative inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 text-brand-navy">
+                <div className="relative hidden h-10 w-10 items-center justify-center rounded-xl border border-slate-200 text-brand-navy sm:inline-flex" aria-hidden="true">
                   <Bell className="h-4 w-4" />
-                  <span className="absolute right-2 top-2 h-2.5 w-2.5 rounded-full bg-brand-green" />
-                </button>
+                </div>
                 <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2">
                   <div className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-navy text-sm font-bold text-white">
                     {session.email.slice(0, 1).toUpperCase()}

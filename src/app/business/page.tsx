@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 const businessSolutions = [
   { title: 'Retail & hospitality', text: 'Drive traffic and revenue with premium driver-friendly charging at strategic customer destinations.', icon: Building2 },
   { title: 'Fleet operations', text: 'Reduce downtime and manage recurring vehicle charging for delivery, taxi and public service fleets.', icon: Route },
-  { title: 'Commercial partnerships', text: 'Turn your property into an EV-ready hub with SELAVOLT network support and operational expertise.', icon: Handshake },
+  { title: 'Commercial partnerships', text: 'Turn your property into an EV-ready hub with SELA ENERGY network support and operational expertise.', icon: Handshake },
   { title: 'Customer retention', text: 'Create a stronger experience for EV drivers and increase dwell time at your location.', icon: Users }
 ];
 
@@ -18,7 +18,7 @@ export default function BusinessPage() {
         <div className="max-w-3xl">
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-brand-cyan">Business solutions</p>
           <h1 className="mt-4 text-4xl font-black text-brand-navy">Power the next generation of mobility.</h1>
-          <p className="mt-4 text-lg text-slate-600">SELAVOLT helps businesses, fleets and public partners roll out dependable EV charging infrastructure with professional support.</p>
+          <p className="mt-4 text-lg text-slate-600">SELA ENERGY helps businesses, fleets and public partners roll out dependable EV charging infrastructure with professional support.</p>
         </div>
 
         <div className="mt-12 grid gap-6 md:grid-cols-2">
@@ -35,7 +35,7 @@ export default function BusinessPage() {
 
         <div className="mt-12 rounded-[30px] border border-slate-200 bg-brand-navy p-8 text-white shadow-soft">
           <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-cyan">Ready to partner?</p>
-          <h2 className="mt-3 text-3xl font-black">Plan a charging site with SELAVOLT</h2>
+          <h2 className="mt-3 text-3xl font-black">Plan a charging site with SELA ENERGY</h2>
           <p className="mt-4 max-w-2xl text-slate-300">From site selection to installation and operations support, we help communities and brands adopt EV charging confidently.</p>
           <div className="mt-6">
             <Button href="/contact" variant="secondary" className="bg-white text-brand-navy">Talk to our team</Button>

@@ -1,6 +1,6 @@
 import { Navbar } from '@/components/navbar';
 import { Footer } from '@/components/footer';
-import { faqs } from '@/data/mock';
+import { faqs } from '@/data/faqs';
 
 export default function FaqPage() {
   return (

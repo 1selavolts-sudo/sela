@@ -4,10 +4,19 @@ import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/navbar';
 import { Footer } from '@/components/footer';
 import { SectionHeading } from '@/components/section-heading';
-import { faqs, stats, stations } from '@/data/mock';
 import { StatusBadge } from '@/components/status-badge';
+import { faqs } from '@/data/faqs';
+import { formatRwf } from '@/lib/format';
+import { globalRateRwf, publicStations } from '@/lib/network';
 
-export default function HomePage() {
+// Reads the database on each request, so new stations show up without a redeploy.
+export const dynamic = 'force-dynamic';
+
+export default async function HomePage() {
+  const [stations, globalRate] = await Promise.all([publicStations(), globalRateRwf()]);
+  const chargerCount = stations.reduce((sum, station) => sum + station.chargerCount, 0);
+  const featured = stations[0];
+
   return (
     <div>
       <Navbar />
@@ -24,7 +33,7 @@ export default function HomePage() {
                 Rwanda EV network
               </div>
               <h1 className="mt-6 max-w-xl text-5xl font-black tracking-tight text-brand-navy sm:text-6xl">
-                Charge Forward with <span className="text-brand-green">SELAVOLT</span>
+                Charge Forward with <span className="text-brand-green">SELA ENERGY</span>
               </h1>
               <p className="mt-6 max-w-xl text-lg text-slate-600">
                 Reliable EV charging infrastructure connecting Rwanda&apos;s roads, cities and businesses.
@@ -36,68 +45,72 @@ export default function HomePage() {
 
               <div className="mt-10 flex flex-wrap gap-8 text-sm text-slate-600">
                 <div>
-                  <p className="text-2xl font-black text-brand-navy">32</p>
+                  <p className="text-2xl font-black text-brand-navy">{stations.length}</p>
                   <p>Stations</p>
                 </div>
                 <div>
-                  <p className="text-2xl font-black text-brand-navy">148</p>
+                  <p className="text-2xl font-black text-brand-navy">{chargerCount}</p>
                   <p>Chargers</p>
                 </div>
-                <div>
-                  <p className="text-2xl font-black text-brand-navy">24/7</p>
-                  <p>Support</p>
-                </div>
               </div>
             </div>
 
-            <div className="card-surface relative overflow-hidden p-5">
-              <div className="rounded-[28px] bg-brand-navy p-6 text-white">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <p className="text-xs uppercase tracking-[0.22em] text-brand-cyan">Live station</p>
-                    <h3 className="mt-3 text-2xl font-bold">Kigali Central Hub</h3>
-                  </div>
-                  <StatusBadge status="Available" />
-                </div>
-
-                <div className="mt-8 rounded-2xl bg-white/5 p-5">
-                  <div className="flex items-center justify-between text-sm text-slate-200">
-                    <span>Station status</span>
-                    <span>Open</span>
-                  </div>
-                  <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
-                    <div className="rounded-2xl bg-white/5 p-4">
-                      <p className="text-slate-300">Power</p>
-                      <p className="mt-2 text-xl font-bold">120 kW</p>
-                    </div>
-                    <div className="rounded-2xl bg-white/5 p-4">
-                      <p className="text-slate-300">Connector</p>
-                      <p className="mt-2 text-xl font-bold">CCS2</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-8 rounded-2xl bg-gradient-to-r from-brand-green to-brand-cyan p-4 text-brand-navy">
-                  <div className="flex items-center justify-between">
+            {featured && (
+              <div className="card-surface relative overflow-hidden p-5">
+                <div className="rounded-[28px] bg-brand-navy p-6 text-white">
+                  <div className="flex items-start justify-between">
                     <div>
-                      <p className="text-xs uppercase tracking-[0.2em]">Current rate</p>
-                      <p className="mt-2 text-3xl font-black">RWF 420 / kWh</p>
+                      <p className="text-xs uppercase tracking-[0.22em] text-brand-cyan">Live station</p>
+                      <h3 className="mt-3 text-2xl font-bold">{featured.name}</h3>
                     </div>
-                    <div className="rounded-full bg-white/70 p-3">
-                      <Zap className="h-6 w-6" />
+                    <StatusBadge status={featured.status} />
+                  </div>
+
+                  <div className="mt-8 rounded-2xl bg-white/5 p-5">
+                    <div className="flex items-center justify-between text-sm text-slate-200">
+                      <span>Opening hours</span>
+                      <span>{featured.openingHours}</span>
+                    </div>
+                    <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
+                      <div className="rounded-2xl bg-white/5 p-4">
+                        <p className="text-slate-300">Max power</p>
+                        <p className="mt-2 text-xl font-bold">{featured.maxPowerKw} kW</p>
+                      </div>
+                      <div className="rounded-2xl bg-white/5 p-4">
+                        <p className="text-slate-300">Connectors</p>
+                        <p className="mt-2 text-xl font-bold">{featured.connectors.join(' / ') || '—'}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-8 rounded-2xl bg-gradient-to-r from-brand-green to-brand-cyan p-4 text-brand-navy">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-xs uppercase tracking-[0.2em]">Current rate</p>
+                        <p className="mt-2 text-3xl font-black">
+                          {featured.fromPriceRwf !== null
+                            ? `${formatRwf(featured.fromPriceRwf)} / kWh`
+                            : globalRate !== null
+                              ? `${formatRwf(globalRate)} / kWh`
+                              : 'Rate not set'}
+                        </p>
+                      </div>
+                      <div className="rounded-full bg-white/70 p-3">
+                        <Zap className="h-6 w-6" />
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </section>
 
         <section className="section-shell py-20">
           <SectionHeading
-            eyebrow="Why SELAVOLT"
+            eyebrow="Why SELA ENERGY"
             title="A charging network designed for confidence and scale"
-            description="From intercity highways to urban centers, SELAVOLT makes EV charging fast, transparent, and dependable."
+            description="From intercity highways to urban centers, SELA ENERGY makes EV charging fast, transparent, and dependable."
           />
 
           <div className="mt-12 grid gap-6 md:grid-cols-3">
@@ -119,33 +132,36 @@ export default function HomePage() {
 
         <section className="bg-brand-navy py-20 text-white">
           <div className="section-shell">
-            <SectionHeading eyebrow="Network" title="Find a charging station" description="Browse the current charging map across Kigali, Nyanza, Nyagatare, and Rusumo." />
+            <SectionHeading eyebrow="Network" title="Find a charging station" description="Browse the stations that are open for charging right now." />
 
-            <div className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-              {stations.map((station) => (
-                <div key={station.id} className="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-bold">{station.name}</h3>
-                    <StatusBadge status={station.status} />
+            {stations.length === 0 ? (
+              <p className="mt-12 rounded-3xl border border-white/10 bg-white/5 p-6 text-slate-200">Our first stations are being added. Check back soon.</p>
+            ) : (
+              <div className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+                {stations.map((station) => (
+                  <div key={station.stationId} className="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm">
+                    <div className="flex items-center justify-between gap-3">
+                      <h3 className="text-lg font-bold">{station.name}</h3>
+                      <StatusBadge status={station.status} />
+                    </div>
+                    <p className="mt-3 text-sm text-slate-300">{station.address}</p>
+                    <div className="mt-5 flex items-center justify-between text-sm text-slate-300">
+                      <span>{station.maxPowerKw} kW</span>
+                      <span>{station.connectors.join(' / ') || '—'}</span>
+                    </div>
+                    <div className="mt-3 flex items-center justify-between text-sm text-slate-300">
+                      <span>{station.availableCount} of {station.chargerCount} available</span>
+                      <span>{station.fromPriceRwf !== null ? `from ${formatRwf(station.fromPriceRwf)}/kWh` : ''}</span>
+                    </div>
+                    <div className="mt-6 flex justify-end">
+                      <Link href={`/stations/${station.stationId}`} className="inline-flex items-center gap-2 text-sm font-semibold text-brand-cyan">
+                        View <ArrowRight className="h-4 w-4" />
+                      </Link>
+                    </div>
                   </div>
-                  <p className="mt-3 text-sm text-slate-300">{station.location}</p>
-                  <div className="mt-5 flex items-center justify-between text-sm text-slate-300">
-                    <span>{station.distanceKm} km</span>
-                    <span>{station.power}</span>
-                  </div>
-                  <div className="mt-3 flex items-center justify-between text-sm text-slate-300">
-                    <span>{station.connector}</span>
-                    <span>RWF {station.priceRwf}/kWh</span>
-                  </div>
-                  <div className="mt-6 flex items-center justify-between">
-                    <span className="text-sm text-slate-300">{station.availableChargers} available</span>
-                    <Link href={`/stations/${station.id}`} className="inline-flex items-center gap-2 text-sm font-semibold text-brand-cyan">
-                      View <ArrowRight className="h-4 w-4" />
-                    </Link>
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         </section>
 
@@ -175,20 +191,21 @@ export default function HomePage() {
         <section className="bg-slate-50 py-20">
           <div className="section-shell">
             <SectionHeading eyebrow="Network impact" title="Built for Rwanda's future of mobility" />
-            <div className="mt-12 grid gap-6 md:grid-cols-4">
-              {stats.map((stat) => (
-                <div key={stat.label} className="card-surface p-6 text-center">
-                  <p className="text-3xl font-black text-brand-navy">{stat.value}</p>
-                  <p className="mt-2 text-sm text-slate-600">{stat.label}</p>
-                  <p className="mt-3 text-xs uppercase tracking-[0.2em] text-brand-cyan">{stat.detail}</p>
-                </div>
-              ))}
+            <div className="mt-12 grid gap-6 md:grid-cols-2">
+              <div className="card-surface p-6 text-center">
+                <p className="text-3xl font-black text-brand-navy">{stations.length}</p>
+                <p className="mt-2 text-sm text-slate-600">Stations open to drivers</p>
+              </div>
+              <div className="card-surface p-6 text-center">
+                <p className="text-3xl font-black text-brand-navy">{chargerCount}</p>
+                <p className="mt-2 text-sm text-slate-600">Chargers on the network</p>
+              </div>
             </div>
           </div>
         </section>
 
         <section className="section-shell py-20">
-          <SectionHeading eyebrow="Partners" title="Built for businesses, fleets, and public infrastructure" description="SELAVOLT supports private charging, business fleets, retail hubs, and high-traffic public stations." />
+          <SectionHeading eyebrow="Partners" title="Built for businesses, fleets, and public infrastructure" description="SELA ENERGY supports private charging, business fleets, retail hubs, and high-traffic public stations." />
           <div className="mt-10 grid gap-6 md:grid-cols-3">
             {[
               { title: 'Retail partners', text: 'Drive EV adoption at commercial centers and hotels.' },

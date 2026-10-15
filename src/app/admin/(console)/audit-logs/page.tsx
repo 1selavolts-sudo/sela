@@ -1,27 +1,53 @@
-import { auditLogs } from '@/lib/admin-data';
 import { requireAdminAccess } from '@/lib/admin-session';
+import { formatDateTime } from '@/lib/format';
+import { prisma } from '@/lib/prisma';
+
+export const dynamic = 'force-dynamic';
 
 export default async function AdminAuditLogsPage() {
   await requireAdminAccess('/admin/audit-logs');
+
+  const entries = await prisma.auditLog.findMany({
+    take: 200,
+    orderBy: { timestamp: 'desc' },
+    include: { user: { select: { email: true } } }
+  });
 
   return (
     <div className="space-y-6">
       <div>
         <p className="text-xs font-semibold uppercase tracking-[0.3em] text-brand-cyan">Audit</p>
         <h2 className="mt-2 text-3xl font-black text-brand-navy">Audit log</h2>
+        <p className="mt-2 text-sm text-slate-600">Every change made in the Control Center, newest first. The 200 most recent entries are shown.</p>
       </div>
 
-      <div className="space-y-4">
-        {auditLogs.map((row) => (
-          <div key={`${row.actor}-${row.action}-${row.time}`} className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-soft">
-            <div className="flex items-center justify-between gap-3">
-              <p className="text-lg font-bold text-brand-navy">{row.action}</p>
-              <span className="rounded-full bg-brand-green/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-brand-green">{row.result}</span>
-            </div>
-            <p className="mt-3 text-sm text-slate-600">{row.actor} changed {row.entity}</p>
-            <p className="mt-1 text-xs text-slate-500">{row.time}</p>
-          </div>
-        ))}
+      <div className="overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-soft">
+        {entries.length === 0 ? (
+          <p className="p-6 text-sm text-slate-600">No changes recorded yet.</p>
+        ) : (
+          <table className="min-w-full text-left text-sm">
+            <thead className="bg-slate-50 text-slate-600">
+              <tr>
+                <th className="px-4 py-3">When</th>
+                <th className="px-4 py-3">Who</th>
+                <th className="px-4 py-3">Action</th>
+                <th className="px-4 py-3">Item</th>
+                <th className="px-4 py-3">IP address</th>
+              </tr>
+            </thead>
+            <tbody>
+              {entries.map((entry) => (
+                <tr key={entry.id} className="border-t border-slate-200">
+                  <td className="px-4 py-3 text-slate-600">{formatDateTime(entry.timestamp)}</td>
+                  <td className="px-4 py-3 text-slate-600">{entry.user?.email ?? 'Unknown'}</td>
+                  <td className="px-4 py-3 font-semibold text-brand-navy">{entry.action}</td>
+                  <td className="px-4 py-3 text-slate-600">{entry.entity}{entry.entityId ? ` (${entry.entityId.slice(0, 8)})` : ''}</td>
+                  <td className="px-4 py-3 text-slate-600">{entry.ipAddress ?? '—'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
     </div>
   );

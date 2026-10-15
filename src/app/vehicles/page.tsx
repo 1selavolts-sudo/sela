@@ -19,7 +19,7 @@ export default function VehiclesPage() {
         <div className="max-w-3xl">
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-brand-cyan">Vehicle support</p>
           <h1 className="mt-4 text-4xl font-black text-brand-navy">Compatible EVs for Rwanda’s growing mobility mix</h1>
-          <p className="mt-4 text-lg text-slate-600">SELAVOLT is designed to support mainstream EV models and a growing range of fleet, passenger and commercial vehicles.</p>
+          <p className="mt-4 text-lg text-slate-600">SELA ENERGY is designed to support mainstream EV models and a growing range of fleet, passenger and commercial vehicles.</p>
         </div>
 
         <div className="mt-12 grid gap-6 md:grid-cols-3">

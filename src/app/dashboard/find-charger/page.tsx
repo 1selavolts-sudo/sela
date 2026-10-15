@@ -1,16 +1,16 @@
-import { ArrowRight, MapPinned, Navigation } from 'lucide-react';
+import Link from 'next/link';
+import { ArrowRight, Navigation } from 'lucide-react';
 import { Navbar } from '@/components/navbar';
 import { Footer } from '@/components/footer';
-import { Button } from '@/components/ui/button';
+import { StatusBadge } from '@/components/status-badge';
+import { formatRwf } from '@/lib/format';
+import { publicStations } from '@/lib/network';
 
-const stations = [
-  { name: 'Kigali Central Hub', distance: '1.8 km', power: '120 kW', status: 'Available now' },
-  { name: 'Nyagatare Rest Stop', distance: '22.4 km', power: '60 kW', status: 'Available now' },
-  { name: 'Rusumo Border Charging', distance: '78.6 km', power: '180 kW', status: 'Busy' },
-  { name: 'Nyanza Retail Hub', distance: '45.2 km', power: '60 kW', status: 'Offline' }
-];
+export const dynamic = 'force-dynamic';
 
-export default function DashboardFindChargerPage() {
+export default async function DashboardFindChargerPage() {
+  const stations = await publicStations();
+
   return (
     <div>
       <Navbar />
@@ -18,29 +18,34 @@ export default function DashboardFindChargerPage() {
         <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-cyan">Find charger</p>
-            <h1 className="mt-3 text-4xl font-black text-brand-navy">Nearby stations</h1>
-          </div>
-          <div className="inline-flex items-center gap-2 rounded-full bg-brand-green/10 px-3 py-2 text-sm font-semibold text-brand-green">
-            <MapPinned className="h-4 w-4" /> DEMO DATA
+            <h1 className="mt-3 text-4xl font-black text-brand-navy">Stations</h1>
           </div>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-          {stations.map((station) => (
-            <div key={station.name} className="card-surface p-5">
-              <div className="flex items-center justify-between">
-                <p className="text-lg font-bold text-brand-navy">{station.name}</p>
-                <Navigation className="h-4 w-4 text-brand-cyan" />
+        {stations.length === 0 ? (
+          <p className="rounded-[28px] border border-slate-200 bg-white p-6 text-slate-600 shadow-soft">Our first stations are being added. Check back soon.</p>
+        ) : (
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+            {stations.map((station) => (
+              <div key={station.stationId} className="card-surface p-5">
+                <div className="flex items-center justify-between gap-3">
+                  <p className="text-lg font-bold text-brand-navy">{station.name}</p>
+                  <Navigation className="h-4 w-4 text-brand-cyan" />
+                </div>
+                <p className="mt-4 text-sm text-slate-600">{station.maxPowerKw} kW • {station.connectors.join(' / ') || '—'}</p>
+                <p className="mt-2 text-sm text-slate-600">{station.fromPriceRwf !== null ? `from ${formatRwf(station.fromPriceRwf)}/kWh` : 'Rate not set'}</p>
+                <div className="mt-4">
+                  <StatusBadge status={station.status} />
+                </div>
+                <div className="mt-5 flex justify-end">
+                  <Link href={`/stations/${station.stationId}`} className="inline-flex items-center gap-2 text-sm font-semibold text-brand-cyan">
+                    View details <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </div>
               </div>
-              <p className="mt-4 text-sm text-slate-600">{station.distance}</p>
-              <p className="mt-2 text-sm text-slate-600">{station.power}</p>
-              <div className="mt-4 rounded-2xl bg-slate-50 p-3 text-sm font-medium text-brand-navy">{station.status}</div>
-              <div className="mt-5">
-                <Button href="/stations" variant="secondary" className="w-full justify-center">View details <ArrowRight className="ml-2 h-4 w-4" /></Button>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </main>
       <Footer />
     </div>
