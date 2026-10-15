@@ -10,7 +10,7 @@ export default async function ForgotPasswordPage({ searchParams }: { searchParam
         <h1 className="mt-3 text-3xl font-black text-brand-navy">Reset password</h1>
         <p className="mt-3 text-sm text-slate-600">Enter your admin email and we’ll send a one-time reset link if the account is eligible.</p>
         {params.status === 'sent' && <p role="status" className="mt-6 rounded-xl bg-emerald-50 px-4 py-3 text-sm text-emerald-800">If an admin account matches that address, a reset link has been sent.</p>}
-        {params.error && <p role="alert" className="mt-6 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-800">{params.error === 'email-unconfigured' || params.error === 'email-delivery' ? 'Reset email is not available right now. Please contact the system administrator.' : 'Enter a valid email address.'}</p>}
+        {params.error && <p role="alert" className="mt-6 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-800">{params.error === 'email-unconfigured' || params.error === 'email-delivery' ? 'Reset email is not available right now. Please contact the system administrator.' : params.error === 'too-many-requests' ? 'Too many reset requests. Wait a while and try again.' : 'Enter a valid email address.'}</p>}
         <form action={requestAdminPasswordResetAction} className="mt-8 space-y-5">
           <div>
             <label htmlFor="admin-email" className="mb-2 block text-sm font-medium text-slate-700">Admin email</label>

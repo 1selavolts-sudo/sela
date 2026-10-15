@@ -7,8 +7,9 @@ import { StatusBadge } from '@/components/status-badge';
 import { Button } from '@/components/ui/button';
 import { stations } from '@/data/mock';
 
-export default function StationDetailPage({ params }: { params: { id: string } }) {
-  const station = stations.find((item) => item.id === params.id);
+export default async function StationDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const station = stations.find((item) => item.id === id);
 
   if (!station) {
     notFound();

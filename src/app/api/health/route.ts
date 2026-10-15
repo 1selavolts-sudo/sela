@@ -1,13 +1,22 @@
-import { getMongoDatabase } from '@/lib/mongodb';
+import { prisma } from '@/lib/prisma';
+
+async function databaseIsReachable() {
+  try {
+    await prisma.$queryRaw`SELECT 1`;
+    return true;
+  } catch (error) {
+    // Log the detail server-side only; it can include the database host.
+    console.error('Health check database query failed:', error);
+    return false;
+  }
+}
 
 export async function GET() {
-  try {
-    const database = await getMongoDatabase();
-    await database.command({ ping: 1 });
-    return Response.json({ status: 'ok', service: 'selavolt', database: 'mongodb', timestamp: new Date().toISOString() });
-  } catch (error) {
-    return Response.json({ status: 'degraded', service: 'selavolt', database: 'mongodb', error: error instanceof Error ? error.message : 'MongoDB unavailable' }, { status: 503 });
-  }
+  const healthy = await databaseIsReachable();
+  return Response.json(
+    { status: healthy ? 'ok' : 'degraded', service: 'selavolt', database: 'postgresql', timestamp: new Date().toISOString() },
+    { status: healthy ? 200 : 503 }
+  );
 }
 
 export async function HEAD() {
@@ -15,11 +24,6 @@ export async function HEAD() {
 }
 
 export async function POST() {
-  try {
-    const database = await getMongoDatabase();
-    await database.command({ ping: 1 });
-    return Response.json({ status: 'ok', database: 'mongodb' });
-  } catch (error) {
-    return Response.json({ status: 'degraded', database: 'mongodb', error: error instanceof Error ? error.message : 'MongoDB unavailable' }, { status: 503 });
-  }
+  const healthy = await databaseIsReachable();
+  return Response.json({ status: healthy ? 'ok' : 'degraded', database: 'postgresql' }, { status: healthy ? 200 : 503 });
 }

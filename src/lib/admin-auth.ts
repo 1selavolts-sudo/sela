@@ -1,6 +1,10 @@
+import { isAdminRole, type AdminRole } from './admin-access';
+
+export const ADMIN_SESSION_COOKIE = 'selavolt_admin_session';
+
 export type AdminSession = {
   email: string;
-  role: string;
+  role: AdminRole;
   expiresAt: number;
 };
 
@@ -32,7 +36,7 @@ async function getSigningKey() {
   );
 }
 
-export async function createAdminSession(email: string, role: string) {
+export async function createAdminSession(email: string, role: AdminRole) {
   const session: AdminSession = { email, role, expiresAt: Date.now() + sessionDurationMs };
   const payload = encodeBase64Url(new TextEncoder().encode(JSON.stringify(session)));
   const signature = await crypto.subtle.sign('HMAC', await getSigningKey(), new TextEncoder().encode(payload));
@@ -55,7 +59,7 @@ export async function verifyAdminSession(value: string | undefined): Promise<Adm
     if (!valid) return null;
 
     const session = JSON.parse(new TextDecoder().decode(decodeBase64Url(payload))) as AdminSession;
-    if (!session.email || !session.role || !Number.isFinite(session.expiresAt) || session.expiresAt <= Date.now()) {
+    if (!session.email || !isAdminRole(session.role) || !Number.isFinite(session.expiresAt) || session.expiresAt <= Date.now()) {
       return null;
     }
 

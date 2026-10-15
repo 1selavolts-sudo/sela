@@ -1,12 +1,12 @@
 import Link from 'next/link';
-import Logo from './Logo';
+import { BrandLogo } from './brand-logo';
 
 export function Footer() {
   return (
     <footer className="border-t border-slate-200 bg-brand-navy text-slate-200">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-10 sm:px-6 lg:grid-cols-4 lg:px-8">
         <div>
-          <Logo variant="dark" width="420px" height="auto" className="max-w-[420px]" />
+          <BrandLogo tone="dark" className="h-auto w-full max-w-[300px]" />
           <p className="mt-4 text-sm text-slate-300">Powering Rwanda&apos;s Electric Future.</p>
         </div>
         <div>

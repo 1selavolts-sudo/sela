@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { Menu } from 'lucide-react';
+import { BrandLogo } from './brand-logo';
+import { MobileMenu } from './mobile-menu';
 import { Button } from './ui/button';
 
 export function Navbar() {
@@ -18,7 +19,11 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/80 backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-        <nav className="hidden items-center gap-8 md:flex">
+        <Link href="/" aria-label="SELA ENERGY LTD home" className="shrink-0">
+          <BrandLogo variant="compact" className="h-10 w-auto" />
+        </Link>
+
+        <nav className="hidden items-center gap-6 lg:flex xl:gap-8">
           {navItems.map((item) => (
             <Link key={item.href} href={item.href} className="text-sm font-medium text-slate-600 transition hover:text-brand-navy">
               {item.label}
@@ -26,14 +31,12 @@ export function Navbar() {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-3 md:flex">
+        <div className="hidden items-center gap-3 lg:flex">
           <Link href="/login" className="text-sm font-medium text-brand-navy">Login</Link>
           <Button href="/register" variant="primary">Register</Button>
         </div>
 
-        <button className="ml-auto inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 md:hidden" aria-label="Open menu">
-          <Menu className="h-5 w-5 text-brand-navy" />
-        </button>
+        <MobileMenu items={navItems} />
       </div>
     </header>
   );

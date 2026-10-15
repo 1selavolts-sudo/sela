@@ -1,9 +1,14 @@
 import type { Config } from 'tailwindcss';
+import defaultTheme from 'tailwindcss/defaultTheme';
 
 const config: Config = {
   content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
     extend: {
+      // --font-sans is set by next/font in src/app/layout.tsx.
+      fontFamily: {
+        sans: ['var(--font-sans)', ...defaultTheme.fontFamily.sans]
+      },
       colors: {
         brand: {
           navy: '#071A2B',

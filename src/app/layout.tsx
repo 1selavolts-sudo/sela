@@ -1,30 +1,25 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Plus_Jakarta_Sans } from 'next/font/google';
 import './globals.css';
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
+const plusJakartaSans = Plus_Jakarta_Sans({ subsets: ['latin'], display: 'swap', variable: '--font-sans' });
 
+// Icons and the web manifest come from app/icon.svg, app/apple-icon.tsx and app/manifest.ts.
 export const metadata: Metadata = {
-  metadataBase: new URL('https://selavolt.rw'),
-  title: 'SELAVOLT | EV Charging Network Rwanda',
-  description: 'SELAVOLT is building reliable electric vehicle charging infrastructure across Rwanda.',
-  manifest: '/manifest.webmanifest',
-  icons: {
-    icon: '/favicon.svg',
-    shortcut: '/favicon.svg',
-    apple: '/favicon.svg'
-  },
+  metadataBase: new URL('https://sela-energy.rw'),
+  title: 'SELA ENERGY LTD | POWERING RWANDA FORWARD',
+  description: 'SELA ENERGY LTD is powering Rwanda forward through energy, EV charging, and future-ready infrastructure.',
   openGraph: {
-    title: 'SELAVOLT | EV Charging Network Rwanda',
-    description: 'Powering Rwanda\'s Electric Future.',
+    title: 'SELA ENERGY LTD | POWERING RWANDA FORWARD',
+    description: 'Modern energy and EV infrastructure for Rwanda.',
     type: 'website'
   }
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body className={`${inter.variable} bg-brand-bg font-sans text-brand-text antialiased`}>{children}</body>
+    <html lang="en" className={plusJakartaSans.variable}>
+      <body className="bg-brand-bg font-sans text-brand-text antialiased">{children}</body>
     </html>
   );
 }

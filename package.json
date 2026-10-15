@@ -2,13 +2,12 @@
   "name": "ev-kiosk-station",
   "version": "1.0.0",
   "description": "Self-service EV charging kiosk with seller flow, customer registration, and mobile money payment",
-  "main": "server.js",
   "scripts": {
     "dev": "next dev",
     "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
-    "legacy-server": "node server.js",
+    "legacy-server": "node legacy/server.js",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate deploy",
     "db:push": "prisma db push"

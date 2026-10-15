@@ -3,7 +3,8 @@ node_modules
 .env
 *.env
 *.env.*
-data/storage.json
+legacy/data/storage.json
+*.tsbuildinfo
 prisma/dev.db
 prisma/dev.db-journal
 

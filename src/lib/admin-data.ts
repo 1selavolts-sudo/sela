@@ -1,11 +1,3 @@
-export type RoleName =
-  | 'SUPER_ADMIN'
-  | 'ADMIN'
-  | 'STATION_MANAGER'
-  | 'FINANCE_MANAGER'
-  | 'SUPPORT_AGENT'
-  | 'TECHNICIAN';
-
 export const adminNav = [
   { title: 'Overview', href: '/admin' },
   { title: 'Stations', href: '/admin/stations' },
@@ -108,7 +100,3 @@ export const auditLogs = [
 ];
 
 export const demoModeBanner = 'DEMO DATA - DEVELOPMENT ONLY';
-
-export const adminHeaderUser = {
-  name: 'Nadine Mugisha', role: 'SUPER_ADMIN'
-};

@@ -2,6 +2,7 @@
 
 import { redirect } from 'next/navigation';
 import { sendAppEmail } from '@/lib/email';
+import { getClientIp, hitRateLimit } from '@/lib/rate-limit';
 
 export async function submitContactAction(formData: FormData) {
   const name = String(formData.get('name') ?? '').trim();
@@ -10,6 +11,12 @@ export async function submitContactAction(formData: FormData) {
 
   if (!name || name.length > 120 || !/^\S+@\S+\.\S+$/.test(email) || email.length > 254 || !message || message.length > 5000) {
     redirect('/contact?error=invalid');
+  }
+
+  // The site-wide cap bounds inbox flooding even if the client IP can't be trusted.
+  const hour = 60 * 60 * 1000;
+  if (hitRateLimit(`contact:ip:${await getClientIp()}`, 5, hour) || hitRateLimit('contact:all', 50, hour)) {
+    redirect('/contact?error=too-many-requests');
   }
 
   const recipient = process.env.CONTACT_EMAIL || process.env.NOTIFICATION_EMAIL || process.env.ADMIN_EMAIL || 'denysmahoro@gmail.com';

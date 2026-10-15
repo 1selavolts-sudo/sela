@@ -1,4 +1,4 @@
-import Logo from '@/components/Logo';
+import { BrandLogo } from '@/components/brand-logo';
 import { loginAction } from './actions';
 
 export default async function AdminLoginPage({ searchParams }: { searchParams: Promise<{ status?: string; error?: string }> }) {
@@ -8,7 +8,7 @@ export default async function AdminLoginPage({ searchParams }: { searchParams: P
     <main className="flex min-h-screen items-center justify-center bg-slate-100 px-4 py-12">
       <div className="w-full max-w-md rounded-[30px] border border-slate-200 bg-white p-8 shadow-soft">
         <div className="mb-6 flex items-center justify-center">
-          <Logo variant="light" width="220px" height="auto" className="max-w-[220px]" />
+          <BrandLogo className="h-auto w-full max-w-[300px]" />
         </div>
 
         <div className="mb-6">
@@ -18,6 +18,7 @@ export default async function AdminLoginPage({ searchParams }: { searchParams: P
           {params.error === 'invalid-credentials' && <p role="alert" className="mt-4 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-800">Email or password is incorrect.</p>}
           {params.error === 'missing-credentials' && <p role="alert" className="mt-4 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-800">Enter your email and password.</p>}
           {params.error === 'service-unavailable' && <p role="alert" className="mt-4 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-800">Admin sign-in is temporarily unavailable. Try again shortly.</p>}
+          {params.error === 'too-many-attempts' && <p role="alert" className="mt-4 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-800">Too many sign-in attempts. Wait 15 minutes and try again.</p>}
         </div>
 
         <form action={loginAction} className="space-y-5">

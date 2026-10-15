@@ -3,12 +3,14 @@
 import type { RoleName } from '@prisma/client';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { isAdminRole } from '@/lib/admin-access';
+import { ADMIN_SESSION_COOKIE } from '@/lib/admin-auth';
 import { isEmailConfigured, sendAppEmail } from '@/lib/email';
 import { createResetToken, hashPassword, hashResetToken } from '@/lib/passwords';
 import { prisma } from '@/lib/prisma';
+import { getClientIp, hitRateLimit } from '@/lib/rate-limit';
 
-const adminRoles: RoleName[] = ['SUPER_ADMIN', 'ADMIN', 'STATION_MANAGER', 'SUPPORT'];
-const eligibleRole = (roles: { name: RoleName }[]) => roles.some((role) => adminRoles.includes(role.name));
+const eligibleRole = (roles: { name: RoleName }[]) => roles.some((role) => isAdminRole(role.name));
 
 function appUrl() {
   return (process.env.APP_URL || `https://${process.env.RAILWAY_PUBLIC_DOMAIN || 'localhost:3000'}`).replace(/\/$/, '');
@@ -32,7 +34,7 @@ async function getOrCreateBootstrapAdmin(email: string) {
       data: {
         email,
         fullName: email.split('@')[0],
-        passwordHash: hashPassword(createResetToken()),
+        passwordHash: await hashPassword(createResetToken()),
         roles: { connect: { id: role.id } }
       },
       include: { roles: true }
@@ -47,6 +49,10 @@ export async function requestAdminPasswordResetAction(formData: FormData) {
   const email = String(formData.get('email') ?? '').trim().toLowerCase();
   if (!/^\S+@\S+\.\S+$/.test(email) || email.length > 254) {
     redirect('/admin/forgot-password?error=invalid-email');
+  }
+  // The per-email cap stops anyone from flooding an admin's inbox with reset emails.
+  if (hitRateLimit(`admin-reset:ip:${await getClientIp()}`, 5, 15 * 60 * 1000) || hitRateLimit(`admin-reset:email:${email}`, 3, 60 * 60 * 1000)) {
+    redirect('/admin/forgot-password?error=too-many-requests');
   }
   if (!isEmailConfigured()) {
     redirect('/admin/forgot-password?error=email-unconfigured');
@@ -111,6 +117,8 @@ export async function resetAdminPasswordAction(formData: FormData) {
     redirect('/admin/forgot-password?error=invalid-token');
   }
 
+  // Hash before opening the transaction so it isn't held open during the slow key derivation.
+  const passwordHash = await hashPassword(password);
   const now = new Date();
   try {
     await prisma.$transaction(async (transaction) => {
@@ -122,7 +130,7 @@ export async function resetAdminPasswordAction(formData: FormData) {
 
       await transaction.user.update({
         where: { id: resetToken.userId },
-        data: { passwordHash: hashPassword(password) }
+        data: { passwordHash }
       });
       await transaction.passwordResetToken.deleteMany({
         where: { userId: resetToken.userId, id: { not: resetToken.id } }
@@ -134,7 +142,7 @@ export async function resetAdminPasswordAction(formData: FormData) {
   }
 
   const cookieStore = await cookies();
-  cookieStore.delete('selavolt_admin_session');
+  cookieStore.delete(ADMIN_SESSION_COOKIE);
   try {
     await sendAppEmail({
       to: resetToken.user.email,

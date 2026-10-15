@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bolt" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#20C6D8"/>
+      <stop offset="100%" stop-color="#43B649"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="#0A2342"/>
+  <!-- Emblem from SELA_Energy_Ltd_Logo.svg, centred and scaled to fill the tile -->
+  <g transform="translate(256 256) scale(1.3) translate(-164.5 -160)">
+    <path d="M165 4C77 4 13 62 13 145C13 214 62 258 140 273L140 226C89 214 64 187 64 147C64 93 106 53 165 53C204 53 236 71 254 101L294 77C267 31 220 4 165 4Z" fill="#FFFFFF"/>
+    <path d="M164 316C252 316 316 258 316 176C316 107 268 63 190 48L190 95C241 108 265 135 265 175C265 229 223 268 164 268C125 268 93 250 75 220L35 244C62 290 109 316 164 316Z" fill="#FFFFFF"/>
+    <path d="M184 76L112 183L163 183L137 250L224 137L172 137Z" fill="url(#bolt)"/>
+  </g>
+</svg>

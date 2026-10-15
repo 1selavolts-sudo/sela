@@ -1,0 +1,10 @@
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="iconTitle iconDesc">
+  <title id="iconTitle">SELA ENERGY LTD icon</title>
+  <desc id="iconDesc">Energy icon with a dark navy square, green lightning, cyan top bar and white base.</desc>
+  <rect width="128" height="128" rx="30" fill="#061A2B"/>
+  <rect x="28" y="34" width="58" height="14" rx="7" fill="#08B6D4"/>
+  <path d="M64 28L45 62H57L47 90L82 58H69L80 28H64Z" fill="#16C96B"/>
+  <path d="M40 90C40 79.506 48.506 71 59 71H85C95.494 71 104 79.506 104 90V94C104 104.494 95.494 113 85 113H59C48.506 113 40 104.494 40 94V90Z" fill="#0F172A"/>
+  <path d="M52 88H92L87 101H57L52 88Z" fill="#FFFFFF"/>
+  <path d="M67 31L73 41H65L73 54H62L56 63L59 55H48L60 31H67Z" fill="#39E75F"/>
+</svg>

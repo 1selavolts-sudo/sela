@@ -15,7 +15,7 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
           <p className="mt-3 text-slate-600">Tell us about your location, fleet needs, or commercial opportunity in Rwanda.</p>
 
           {params.sent === '1' && <p role="status" className="mt-6 rounded-xl bg-emerald-50 px-4 py-3 text-sm text-emerald-800">Your inquiry was sent. We’ll get back to you soon.</p>}
-          {params.error && <p role="alert" className="mt-6 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-800">{params.error === 'delivery' ? 'We could not send your inquiry. Please try again later or email denysmahoro@gmail.com.' : 'Please complete the form with a valid email and message.'}</p>}
+          {params.error && <p role="alert" className="mt-6 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-800">{params.error === 'delivery' ? 'We could not send your inquiry. Please try again later or email denysmahoro@gmail.com.' : params.error === 'too-many-requests' ? 'Too many messages have been sent. Please try again in an hour.' : 'Please complete the form with a valid email and message.'}</p>}
 
           <form action={submitContactAction} className="mt-8 space-y-5">
             <div>
