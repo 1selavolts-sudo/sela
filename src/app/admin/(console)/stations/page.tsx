@@ -40,7 +40,7 @@ export default async function AdminStationsPage({ searchParams }: { searchParams
         {stations.length === 0 ? (
           <p className="p-6 text-sm text-slate-600">No stations yet. Add your first station below.</p>
         ) : (
-          <table className="min-w-full text-left text-sm">
+          <table className="admin-table min-w-full text-left text-sm">
             <thead className="bg-slate-50 text-slate-600">
               <tr>
                 <th className="px-4 py-3">Station</th>
@@ -53,17 +53,19 @@ export default async function AdminStationsPage({ searchParams }: { searchParams
             </thead>
             <tbody>
               {stations.map((station) => (
-                <tr key={station.id} className="border-t border-slate-200">
-                  <td className="px-4 py-3">
+                <tr key={station.id} className="border-t border-slate-200 align-top">
+                  <td className="px-4 py-3" data-label="Station">
                     <p className="font-semibold text-brand-navy">{station.name}</p>
                     <p className="text-xs text-slate-500">{station.address}</p>
                   </td>
-                  <td className="px-4 py-3 text-slate-600">{station.district}</td>
-                  <td className="px-4 py-3 text-slate-600">{stationStatusLabels[station.status]}</td>
-                  <td className="px-4 py-3 text-slate-600">{station._count.chargers}</td>
-                  <td className="px-4 py-3 text-slate-600">{station.status === 'ACTIVE' ? <Link href={`/stations/${station.stationId}`} className="font-semibold text-brand-cyan">/stations/{station.stationId}</Link> : 'Hidden'}</td>
-                  <td className="px-4 py-3 text-right">
-                    <Link href={`/admin/stations/${station.id}`} className="rounded-xl border border-slate-200 px-3 py-1.5 text-xs font-semibold text-brand-navy">Edit</Link>
+                  <td className="px-4 py-3 text-slate-600" data-label="District">{station.district}</td>
+                  <td className="px-4 py-3 text-slate-600" data-label="Status">{stationStatusLabels[station.status]}</td>
+                  <td className="px-4 py-3 text-slate-600" data-label="Chargers">{station._count.chargers}</td>
+                  <td className="px-4 py-3 text-slate-600 break-all" data-label="Public page">{station.status === 'ACTIVE' ? <Link href={`/stations/${station.stationId}`} className="font-semibold text-brand-cyan">/stations/{station.stationId}</Link> : 'Hidden'}</td>
+                  <td className="px-4 py-3">
+                    <div className="flex flex-wrap items-center gap-2 md:justify-end">
+                      <Link href={`/admin/stations/${station.id}`} className="rounded-xl border border-slate-200 px-3 py-1.5 text-xs font-semibold text-brand-navy">Edit</Link>
+                    </div>
                   </td>
                 </tr>
               ))}

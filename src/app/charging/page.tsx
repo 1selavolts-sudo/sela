@@ -4,9 +4,9 @@ import { Footer } from '@/components/footer';
 import { Button } from '@/components/ui/button';
 
 const chargingFeatures = [
-  { title: 'Fast charging', text: 'High-power charging for road trips, city commutes and commercial fleets.', icon: Zap },
-  { title: 'Smart session control', text: 'Monitor energy, pricing and charging status in real time from a single workflow.', icon: BatteryCharging },
-  { title: 'Secure operations', text: 'Role-based site management and payment integrity with strict audit trails.', icon: ShieldCheck }
+  { title: 'No app or account', text: 'Scan the code on the charger and pay with your MTN MoMo number. Nothing to install or sign up for.', icon: Zap },
+  { title: 'Know the price first', text: 'The price per kWh and the energy each amount buys are shown before you pay.', icon: BatteryCharging },
+  { title: 'A receipt you can keep', text: 'Every payment has its own receipt page with a reference number.', icon: ShieldCheck }
 ];
 
 export default function ChargingPage() {
@@ -15,9 +15,9 @@ export default function ChargingPage() {
       <Navbar />
       <main className="section-shell py-16">
         <div className="max-w-3xl">
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-brand-cyan">Charging experience</p>
-          <h1 className="mt-4 text-4xl font-black text-brand-navy">EV charging built for Rwanda’s pace</h1>
-          <p className="mt-4 text-lg text-slate-600">SELA ENERGY brings dependable, premium charging to highways, city centers, fleet depots, and commercial destinations.</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-brand-cyan">Charging</p>
+          <h1 className="mt-4 text-4xl font-black text-brand-navy">Charging in three simple steps</h1>
+          <p className="mt-4 text-lg text-slate-600">SELA ENERGY brings dependable charging to highways, city centers, fleet depots, and commercial destinations.</p>
         </div>
 
         <div className="mt-12 grid gap-6 md:grid-cols-3">
@@ -42,7 +42,7 @@ export default function ChargingPage() {
           </div>
 
           <div className="mt-8 grid gap-6 md:grid-cols-4">
-            {['Plan route', 'Choose charger', 'Authenticate', 'Charge & pay'].map((step, index) => (
+            {['Scan the code', 'Choose an amount', 'Approve on your phone', 'Plug in and charge'].map((step, index) => (
               <div key={step} className="rounded-2xl bg-slate-50 p-4">
                 <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-cyan">0{index + 1}</p>
                 <p className="mt-3 text-lg font-bold text-brand-navy">{step}</p>

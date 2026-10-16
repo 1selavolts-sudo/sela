@@ -17,3 +17,10 @@ export async function requireAdminAccess(pathname: string) {
   if (!canAccessAdminPath(session.role, pathname)) redirect('/admin?error=forbidden');
   return session;
 }
+
+// Changes only a super admin may make, wherever the section menu shows them.
+export async function requireSuperAdmin(pathname: string) {
+  const session = await requireAdminAccess(pathname);
+  if (session.role !== 'SUPER_ADMIN') redirect('/admin?error=forbidden');
+  return session;
+}

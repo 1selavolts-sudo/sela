@@ -91,12 +91,12 @@ export async function updateCharger(formData: FormData) {
 export async function deleteCharger(formData: FormData) {
   const session = await requireAdminAccess(listPath);
   const id = String(formData.get('id') ?? '');
-  const charger = await prisma.charger.findUnique({ where: { id }, select: { id: true, _count: { select: { sessions: true } } } });
+  const charger = await prisma.charger.findUnique({ where: { id }, select: { id: true, _count: { select: { sessions: true, momoPayments: true } } } });
   if (!charger) {
     redirect(`${listPath}?error=not-found`);
   }
-  // Charging sessions are kept for billing records, so a charger that has been used cannot be deleted.
-  if (charger._count.sessions > 0) {
+  // Sessions and MoMo payments are kept for billing records, so a charger that has been used cannot be deleted.
+  if (charger._count.sessions > 0 || charger._count.momoPayments > 0) {
     redirect(`${listPath}/${id}?error=has-sessions`);
   }
 

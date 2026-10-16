@@ -31,7 +31,7 @@ export function AdminShell({ session, children }: { session: AdminSession; child
           </nav>
         </aside>
 
-        <div className="flex-1">
+        <div className="min-w-0 flex-1">
           <header className="border-b border-slate-200 bg-white/80 backdrop-blur-xl">
             <div className="flex items-center justify-between gap-4 px-5 py-4 lg:px-8">
               <div className="flex items-center gap-3">

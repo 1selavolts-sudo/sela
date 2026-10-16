@@ -10,6 +10,7 @@ export default function RegisterPage() {
         <div className="mx-auto max-w-xl rounded-[30px] border border-slate-200 bg-white p-8 shadow-soft">
           <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-cyan">Create account</p>
           <h1 className="mt-3 text-3xl font-black text-brand-navy">Register with SELA ENERGY</h1>
+          <p className="mt-4 text-sm text-slate-600">Accounts are not open yet. You don&apos;t need one to charge: scan the code on a charger and pay with MoMo.</p>
 
           <form className="mt-8 space-y-5">
             <div className="grid gap-5 sm:grid-cols-2">
@@ -25,6 +26,10 @@ export default function RegisterPage() {
             <div>
               <label className="mb-2 block text-sm font-medium text-slate-700">Email</label>
               <input type="email" className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3" placeholder="you@example.com" />
+            </div>
+            <div>
+              <label className="mb-2 block text-sm font-medium text-slate-700">Vehicle plate number</label>
+              <input autoCapitalize="characters" className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3" placeholder="e.g. RAB 123 A" />
             </div>
             <div>
               <label className="mb-2 block text-sm font-medium text-slate-700">Password</label>

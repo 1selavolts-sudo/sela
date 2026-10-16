@@ -27,7 +27,7 @@ export default async function AdminLiveOperationsPage() {
         {chargers.length === 0 ? (
           <p className="p-6 text-sm text-slate-600">No chargers yet. Add chargers on the Chargers page.</p>
         ) : (
-          <table className="min-w-full text-left text-sm">
+          <table className="admin-table min-w-full text-left text-sm">
             <thead className="bg-slate-50 text-slate-600">
               <tr>
                 <th className="px-4 py-3">Charger</th>
@@ -42,13 +42,13 @@ export default async function AdminLiveOperationsPage() {
               {chargers.map((charger) => {
                 const session = charger.sessions[0];
                 return (
-                  <tr key={charger.id} className="border-t border-slate-200">
-                    <td className="px-4 py-3 font-semibold text-brand-navy">{charger.chargerId}</td>
-                    <td className="px-4 py-3 text-slate-600">{charger.station.name}</td>
-                    <td className="px-4 py-3 text-slate-600">{connectorLabels[charger.connectorType]}</td>
-                    <td className="px-4 py-3 text-slate-600">{charger.powerKw} kW</td>
-                    <td className="px-4 py-3 text-slate-600">{chargerStatusLabels[charger.operationalStatus]}</td>
-                    <td className="px-4 py-3 text-slate-600">
+                  <tr key={charger.id} className="border-t border-slate-200 align-top">
+                    <td className="px-4 py-3 font-semibold text-brand-navy" data-label="Charger">{charger.chargerId}</td>
+                    <td className="px-4 py-3 text-slate-600" data-label="Station">{charger.station.name}</td>
+                    <td className="px-4 py-3 text-slate-600" data-label="Connector">{connectorLabels[charger.connectorType]}</td>
+                    <td className="px-4 py-3 text-slate-600" data-label="Power">{charger.powerKw} kW</td>
+                    <td className="px-4 py-3 text-slate-600" data-label="Status">{chargerStatusLabels[charger.operationalStatus]}</td>
+                    <td className="px-4 py-3 text-slate-600" data-label="Current session">
                       {session ? `${session.sessionId} • ${formatKwh(session.energyDeliveredKwh ?? 0)} • started ${formatDateTime(session.startTime)}` : 'No active session'}
                     </td>
                   </tr>

@@ -19,7 +19,7 @@ export function BarChart({ values, labels, tone = 'green' }: { values: number[];
 
   const heights = barPercentages(values);
   return (
-    <div className="flex h-56 items-end gap-2">
+    <div className="flex h-56 items-end gap-1 sm:gap-2">
       {values.map((value, index) => (
         <div key={labels[index]} className="flex h-full flex-1 flex-col items-center gap-2">
           <div className="flex w-full flex-1 items-end">

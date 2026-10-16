@@ -1,5 +1,6 @@
+import Link from 'next/link';
 import { adminRoles } from '@/lib/admin-access';
-import { requireAdminAccess } from '@/lib/admin-session';
+import { requireSuperAdmin } from '@/lib/admin-session';
 import { formatDateTime } from '@/lib/format';
 import { prisma } from '@/lib/prisma';
 import { changeStaffRole, createAdmin } from './actions';
@@ -10,14 +11,15 @@ const roleLabels: Record<string, string> = {
   SUPER_ADMIN: 'Super admin',
   ADMIN: 'Admin',
   STATION_MANAGER: 'Station manager',
-  SUPPORT: 'Support'
+  SUPPORT: 'Support',
+  NONE: 'No admin access'
 };
 
 const messages: Record<string, string> = {
-  invalid: 'Check the new admin details. The password must be 12 to 128 characters.',
+  invalid: 'Check the details. Choose a valid role, and use a password of 12 to 128 characters when adding an admin.',
   exists: 'An account with that email already exists.',
   'not-found': 'That account no longer exists.',
-  self: 'You cannot change your own role.'
+  'last-super-admin': 'At least one super admin must remain. Make another person a super admin before changing this one.'
 };
 
 const saved: Record<string, string> = {
@@ -28,7 +30,7 @@ const saved: Record<string, string> = {
 const inputClass = 'rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none focus:border-brand-cyan';
 
 export default async function AdminStaffPage({ searchParams }: { searchParams: Promise<{ error?: string; saved?: string }> }) {
-  const session = await requireAdminAccess('/admin/staff');
+  const session = await requireSuperAdmin('/admin/staff');
   const params = await searchParams;
   const staff = await prisma.user.findMany({
     where: { roles: { some: { name: { in: [...adminRoles] } } } },
@@ -41,20 +43,21 @@ export default async function AdminStaffPage({ searchParams }: { searchParams: P
       <div>
         <p className="text-xs font-semibold uppercase tracking-[0.3em] text-brand-cyan">Access</p>
         <h2 className="mt-2 text-3xl font-black text-brand-navy">Staff and permissions</h2>
-        <p className="mt-2 max-w-2xl text-sm text-slate-600">Only super admins can see this page. Each role sees the Control Center sections listed in admin-access.ts.</p>
+        <p className="mt-2 max-w-2xl text-sm text-slate-600">Only super admins can see this page. Each role sees the Control Center sections listed in admin-access.ts. You can change anyone&apos;s role, including your own, as long as at least one super admin remains.</p>
       </div>
 
       {params.error && <p role="alert" className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-800">{messages[params.error] ?? 'Something went wrong. Please try again.'}</p>}
       {params.saved && saved[params.saved] && <p role="status" className="rounded-xl bg-emerald-50 px-4 py-3 text-sm text-emerald-800">{saved[params.saved]}</p>}
 
       <div className="overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-soft">
-        <table className="min-w-full text-left text-sm">
+        <table className="admin-table min-w-full text-left text-sm">
           <thead className="bg-slate-50 text-slate-600">
             <tr>
               <th className="px-4 py-3">Name and email</th>
               <th className="px-4 py-3">Role</th>
               <th className="px-4 py-3">Change role</th>
               <th className="px-4 py-3">Added</th>
+              <th className="px-4 py-3"></th>
             </tr>
           </thead>
           <tbody>
@@ -62,28 +65,30 @@ export default async function AdminStaffPage({ searchParams }: { searchParams: P
               const currentRole = member.roles.map((role) => role.name).find((name) => (adminRoles as readonly string[]).includes(name)) ?? '';
               const isSelf = member.email === session.email;
               return (
-                <tr key={member.id} className="border-t border-slate-200">
-                  <td className="px-4 py-3">
+                <tr key={member.id} className="border-t border-slate-200 align-top">
+                  <td className="px-4 py-3" data-label="Name and email">
                     <p className="font-semibold text-brand-navy">{member.fullName}</p>
                     <p className="text-xs text-slate-500">{member.email}{isSelf ? ' (you)' : ''}</p>
                   </td>
-                  <td className="px-4 py-3 text-slate-600">{roleLabels[currentRole] ?? currentRole}</td>
-                  <td className="px-4 py-3">
-                    {isSelf ? (
-                      <span className="text-xs text-slate-500">Ask another super admin to change your role.</span>
-                    ) : (
-                      <form action={changeStaffRole} className="flex items-center gap-2">
-                        <input type="hidden" name="id" value={member.id} />
-                        <select name="role" defaultValue={currentRole} className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm">
-                          {Object.entries(roleLabels).map(([value, label]) => (
-                            <option key={value} value={value}>{label}</option>
-                          ))}
-                        </select>
-                        <button type="submit" className="rounded-xl border border-slate-200 px-3 py-2 text-xs font-semibold text-brand-navy">Save</button>
-                      </form>
-                    )}
+                  <td className="px-4 py-3 text-slate-600" data-label="Role">{roleLabels[currentRole] ?? currentRole}</td>
+                  <td className="px-4 py-3" data-label="Change role">
+                    <form action={changeStaffRole} className="flex flex-wrap items-center gap-2">
+                      <input type="hidden" name="id" value={member.id} />
+                      <select name="role" defaultValue={currentRole} aria-label={`Role for ${member.email}`} className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm">
+                        {Object.entries(roleLabels).map(([value, label]) => (
+                          <option key={value} value={value}>{label}</option>
+                        ))}
+                      </select>
+                      <button type="submit" className="rounded-xl border border-slate-200 px-3 py-2 text-xs font-semibold text-brand-navy">Save</button>
+                    </form>
+                    {isSelf && <p className="mt-2 text-xs text-slate-500">Changing your own role signs you out.</p>}
                   </td>
-                  <td className="px-4 py-3 text-slate-600">{formatDateTime(member.createdAt)}</td>
+                  <td className="px-4 py-3 text-slate-600" data-label="Added">{formatDateTime(member.createdAt)}</td>
+                  <td className="px-4 py-3">
+                    <div className="flex flex-wrap items-center gap-2 md:justify-end">
+                      <Link href={`/admin/staff/${member.id}`} className="rounded-xl border border-slate-200 px-3 py-1.5 text-xs font-semibold text-brand-navy">Edit</Link>
+                    </div>
+                  </td>
                 </tr>
               );
             })}
@@ -98,8 +103,8 @@ export default async function AdminStaffPage({ searchParams }: { searchParams: P
           <input name="fullName" required maxLength={120} placeholder="Full name" className={inputClass} />
           <input name="email" type="email" required maxLength={254} placeholder="Email" className={inputClass} />
           <select name="role" defaultValue="SUPPORT" className={inputClass}>
-            {Object.entries(roleLabels).map(([value, label]) => (
-              <option key={value} value={value}>{label}</option>
+            {adminRoles.map((role) => (
+              <option key={role} value={role}>{roleLabels[role]}</option>
             ))}
           </select>
           <input name="password" type="password" required minLength={12} maxLength={128} autoComplete="new-password" placeholder="Temporary password (12+ characters)" className={inputClass} />

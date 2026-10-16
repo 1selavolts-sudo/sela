@@ -11,7 +11,7 @@ const messages: Record<string, string> = {
   invalid: 'Check the charger details. Power and connector count must be whole numbers, and the code may only use letters, numbers and dashes.',
   'no-station': 'Choose a station that exists.',
   'duplicate-code': 'Another charger already uses that code. Charger codes must be unique.',
-  'has-sessions': 'This charger has charging sessions on record, so it cannot be deleted. Set its status to Offline instead.'
+  'has-sessions': 'This charger has charging sessions or mobile money payments on record, so it cannot be deleted. Set its status to Offline instead.'
 };
 
 export default async function AdminChargerEditPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ error?: string; saved?: string }> }) {
@@ -20,7 +20,7 @@ export default async function AdminChargerEditPage({ params, searchParams }: { p
   const { error, saved } = await searchParams;
 
   const [charger, stations] = await Promise.all([
-    prisma.charger.findUnique({ where: { id }, include: { _count: { select: { sessions: true } } } }),
+    prisma.charger.findUnique({ where: { id }, include: { _count: { select: { sessions: true, momoPayments: true } } } }),
     prisma.station.findMany({ orderBy: { name: 'asc' }, select: { id: true, name: true } })
   ]);
   if (!charger) {
@@ -62,8 +62,8 @@ export default async function AdminChargerEditPage({ params, searchParams }: { p
 
       <section className="rounded-[28px] border border-red-200 bg-white p-6 shadow-soft">
         <h3 className="text-lg font-bold text-red-700">Delete charger</h3>
-        {charger._count.sessions > 0 ? (
-          <p className="mt-2 text-sm text-slate-600">This charger has {charger._count.sessions} charging session{charger._count.sessions === 1 ? '' : 's'} on record. Set its status to Offline instead.</p>
+        {charger._count.sessions + charger._count.momoPayments > 0 ? (
+          <p className="mt-2 text-sm text-slate-600">This charger has charging sessions or mobile money payments on record. Set its status to Offline instead.</p>
         ) : (
           <form action={deleteCharger} className="mt-4">
             <input type="hidden" name="id" value={charger.id} />

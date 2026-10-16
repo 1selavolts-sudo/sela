@@ -45,7 +45,7 @@ export default async function AdminChargersPage({ searchParams }: { searchParams
             {chargers.length === 0 ? (
               <p className="p-6 text-sm text-slate-600">No chargers yet. Add your first charger below.</p>
             ) : (
-              <table className="min-w-full text-left text-sm">
+              <table className="admin-table min-w-full text-left text-sm">
                 <thead className="bg-slate-50 text-slate-600">
                   <tr>
                     <th className="px-4 py-3">Charger</th>
@@ -59,13 +59,15 @@ export default async function AdminChargersPage({ searchParams }: { searchParams
                 <tbody>
                   {chargers.map((charger) => (
                     <tr key={charger.id} className="border-t border-slate-200">
-                      <td className="px-4 py-3 font-semibold text-brand-navy">{charger.chargerId}</td>
-                      <td className="px-4 py-3 text-slate-600">{charger.station.name}</td>
-                      <td className="px-4 py-3 text-slate-600">{connectorLabels[charger.connectorType]}</td>
-                      <td className="px-4 py-3 text-slate-600">{charger.powerKw} kW</td>
-                      <td className="px-4 py-3 text-slate-600">{chargerStatusLabels[charger.operationalStatus]}</td>
-                      <td className="px-4 py-3 text-right">
-                        <Link href={`/admin/chargers/${charger.id}`} className="rounded-xl border border-slate-200 px-3 py-1.5 text-xs font-semibold text-brand-navy">Edit</Link>
+                      <td className="px-4 py-3 font-semibold text-brand-navy" data-label="Charger">{charger.chargerId}</td>
+                      <td className="px-4 py-3 text-slate-600" data-label="Station">{charger.station.name}</td>
+                      <td className="px-4 py-3 text-slate-600" data-label="Connector">{connectorLabels[charger.connectorType]}</td>
+                      <td className="px-4 py-3 text-slate-600" data-label="Power">{charger.powerKw} kW</td>
+                      <td className="px-4 py-3 text-slate-600" data-label="Status">{chargerStatusLabels[charger.operationalStatus]}</td>
+                      <td className="px-4 py-3">
+                        <div className="flex flex-wrap items-center gap-2 md:justify-end">
+                          <Link href={`/admin/chargers/${charger.id}`} className="rounded-xl border border-slate-200 px-3 py-1.5 text-xs font-semibold text-brand-navy">Edit</Link>
+                        </div>
                       </td>
                     </tr>
                   ))}

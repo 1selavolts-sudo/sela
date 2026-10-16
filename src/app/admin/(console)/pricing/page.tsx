@@ -1,8 +1,9 @@
+import Link from 'next/link';
 import { requireAdminAccess } from '@/lib/admin-session';
 import { connectorLabels, formatDateTime } from '@/lib/format';
 import { toKigaliInputValue } from '@/lib/network';
 import { prisma } from '@/lib/prisma';
-import { createPricingRule, deletePricingRule, updatePricingRule } from './actions';
+import { createPricingRule, deletePricingRule } from './actions';
 
 export const dynamic = 'force-dynamic';
 
@@ -15,7 +16,6 @@ const messages: Record<string, string> = {
 
 const saved: Record<string, string> = {
   created: 'Rate added.',
-  updated: 'Rate updated.',
   deleted: 'Rate deleted.'
 };
 
@@ -45,7 +45,7 @@ export default async function AdminPricingPage({ searchParams }: { searchParams:
         {rules.length === 0 ? (
           <p className="p-6 text-sm text-slate-600">No rates yet. Add a rate below, for example an all-stations rate.</p>
         ) : (
-          <table className="min-w-full text-left text-sm">
+          <table className="admin-table min-w-full text-left text-sm">
             <thead className="bg-slate-50 text-slate-600">
               <tr>
                 <th className="px-4 py-3">Applies to</th>
@@ -53,7 +53,6 @@ export default async function AdminPricingPage({ searchParams }: { searchParams:
                 <th className="px-4 py-3">Starts</th>
                 <th className="px-4 py-3">Ends</th>
                 <th className="px-4 py-3">Status</th>
-                <th className="px-4 py-3">Change</th>
                 <th className="px-4 py-3"></th>
               </tr>
             </thead>
@@ -63,24 +62,19 @@ export default async function AdminPricingPage({ searchParams }: { searchParams:
                 const scope = `${rule.station ? rule.station.name : 'All stations'} • ${rule.connectorType ? connectorLabels[rule.connectorType] : 'All connectors'}`;
                 return (
                   <tr key={rule.id} className="border-t border-slate-200 align-top">
-                    <td className="px-4 py-3 font-semibold text-brand-navy">{scope}</td>
-                    <td className="px-4 py-3 text-slate-700">{Math.round(rule.pricePerKwh).toLocaleString('en-US')}</td>
-                    <td className="px-4 py-3 text-slate-600">{formatDateTime(rule.validFrom)}</td>
-                    <td className="px-4 py-3 text-slate-600">{rule.validTo ? formatDateTime(rule.validTo) : 'No end'}</td>
-                    <td className="px-4 py-3 text-slate-600">{status}</td>
+                    <td className="px-4 py-3 font-semibold text-brand-navy" data-label="Applies to">{scope}</td>
+                    <td className="px-4 py-3 text-slate-700" data-label="Rate (RWF/kWh)">{Math.round(rule.pricePerKwh).toLocaleString('en-US')}</td>
+                    <td className="px-4 py-3 text-slate-600" data-label="Starts">{formatDateTime(rule.validFrom)}</td>
+                    <td className="px-4 py-3 text-slate-600" data-label="Ends">{rule.validTo ? formatDateTime(rule.validTo) : 'No end'}</td>
+                    <td className="px-4 py-3 text-slate-600" data-label="Status">{status}</td>
                     <td className="px-4 py-3">
-                      <form action={updatePricingRule} className="flex flex-wrap items-center gap-2">
-                        <input type="hidden" name="id" value={rule.id} />
-                        <input name="pricePerKwh" required inputMode="numeric" defaultValue={Math.round(rule.pricePerKwh)} className={`${inputClass} w-28`} aria-label="Rate in RWF per kWh" />
-                        <input name="validTo" type="datetime-local" defaultValue={toKigaliInputValue(rule.validTo)} className={inputClass} aria-label="End time (Kigali time, leave empty for no end)" />
-                        <button type="submit" className="rounded-xl border border-slate-200 px-3 py-2 text-xs font-semibold text-brand-navy">Save</button>
-                      </form>
-                    </td>
-                    <td className="px-4 py-3 text-right">
-                      <form action={deletePricingRule}>
-                        <input type="hidden" name="id" value={rule.id} />
-                        <button type="submit" className="rounded-xl border border-red-200 px-3 py-2 text-xs font-semibold text-red-600">Delete</button>
-                      </form>
+                      <div className="flex flex-wrap items-center gap-2 md:justify-end">
+                        <Link href={`/admin/pricing/${rule.id}`} className="rounded-xl border border-slate-200 px-3 py-1.5 text-xs font-semibold text-brand-navy">Edit</Link>
+                        <form action={deletePricingRule}>
+                          <input type="hidden" name="id" value={rule.id} />
+                          <button type="submit" className="rounded-xl border border-red-200 px-3 py-1.5 text-xs font-semibold text-red-600">Delete</button>
+                        </form>
+                      </div>
                     </td>
                   </tr>
                 );

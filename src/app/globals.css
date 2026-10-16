@@ -31,3 +31,38 @@ body {
     @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
   }
 }
+
+/* Control Center tables become a stack of cards on phones. Each cell shows its column name from data-label. */
+@media (max-width: 767px) {
+  .admin-table thead {
+    display: none;
+  }
+
+  .admin-table,
+  .admin-table tbody,
+  .admin-table tr,
+  .admin-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .admin-table tr {
+    padding: 0.75rem 1rem;
+  }
+
+  .admin-table td {
+    padding: 0.2rem 0;
+    text-align: left;
+    overflow-wrap: anywhere;
+  }
+
+  .admin-table td[data-label]::before {
+    content: attr(data-label);
+    display: block;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #64748b;
+  }
+}

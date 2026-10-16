@@ -33,7 +33,7 @@ export function Footer() {
             <li><Link href="/privacy">Privacy</Link></li>
             <li><Link href="/terms">Terms</Link></li>
             <li><Link href="/cookies">Cookies</Link></li>
-            <li>Kigali • Nyagatare • Rusumo</li>
+            <li>Kigali</li>
           </ul>
         </div>
       </div>

@@ -1,8 +1,12 @@
-import type { ChargerStatus, ConnectorType, StationStatus } from '@prisma/client';
+import type { ChargerStatus, ConnectorType, NotificationChannel, PaymentStatus, SessionStatus, StationStatus } from '@prisma/client';
 
 export const connectorTypes = ['CCS2', 'GB_T'] as const satisfies readonly ConnectorType[];
 export const chargerStatuses = ['AVAILABLE', 'CHARGING', 'PREPARING', 'SUSPENDED', 'FINISHING', 'FAULTED', 'UNAVAILABLE', 'OFFLINE'] as const satisfies readonly ChargerStatus[];
 export const stationStatuses = ['ACTIVE', 'MAINTENANCE', 'INACTIVE'] as const satisfies readonly StationStatus[];
+export const paymentStatuses = ['PENDING', 'AUTHORIZED', 'PAID', 'FAILED', 'REFUNDED', 'CANCELLED'] as const satisfies readonly PaymentStatus[];
+export const sessionStatuses = ['SCHEDULED', 'CHARGING', 'COMPLETED', 'CANCELLED', 'FAULTED'] as const satisfies readonly SessionStatus[];
+export const notificationChannels = ['IN_APP', 'SMS', 'EMAIL', 'PUSH'] as const satisfies readonly NotificationChannel[];
+export const accountStatuses = ['ACTIVE', 'SUSPENDED', 'CLOSED'] as const;
 
 export const connectorLabels: Record<ConnectorType, string> = { CCS2: 'CCS2', GB_T: 'GB/T' };
 
@@ -18,6 +22,23 @@ export const chargerStatusLabels: Record<ChargerStatus, string> = {
 };
 
 export const stationStatusLabels: Record<StationStatus, string> = { ACTIVE: 'Open', MAINTENANCE: 'Maintenance', INACTIVE: 'Closed' };
+export const paymentStatusLabels: Record<PaymentStatus, string> = {
+  PENDING: 'Pending',
+  AUTHORIZED: 'Authorized',
+  PAID: 'Paid',
+  FAILED: 'Failed',
+  REFUNDED: 'Refunded',
+  CANCELLED: 'Cancelled'
+};
+export const sessionStatusLabels: Record<SessionStatus, string> = {
+  SCHEDULED: 'Scheduled',
+  CHARGING: 'Charging',
+  COMPLETED: 'Completed',
+  CANCELLED: 'Cancelled',
+  FAULTED: 'Faulted'
+};
+export const notificationChannelLabels: Record<NotificationChannel, string> = { IN_APP: 'In app', SMS: 'SMS', EMAIL: 'Email', PUSH: 'Push' };
+export const accountStatusLabels: Record<(typeof accountStatuses)[number], string> = { ACTIVE: 'Active', SUSPENDED: 'Suspended', CLOSED: 'Closed' };
 
 export type Tone = 'green' | 'cyan' | 'amber' | 'red' | 'slate';
 

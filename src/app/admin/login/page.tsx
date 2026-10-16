@@ -15,7 +15,8 @@ export default async function AdminLoginPage({ searchParams }: { searchParams: P
           <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-cyan">Secure access</p>
           <h1 className="mt-3 text-3xl font-black text-brand-navy">Admin login</h1>
           {params.status === 'password-updated' && <p role="status" className="mt-4 rounded-xl bg-emerald-50 px-4 py-3 text-sm text-emerald-800">Password updated. Sign in with your new password.</p>}
-          {params.error === 'invalid-credentials' && <p role="alert" className="mt-4 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-800">Email or password is incorrect.</p>}
+          {params.status === 'access-changed' && <p role="status" className="mt-4 rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-800">Your access was changed. Sign in again to continue.</p>}
+          {params.error === 'invalid-credentials' &&<p role="alert" className="mt-4 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-800">Email or password is incorrect.</p>}
           {params.error === 'missing-credentials' && <p role="alert" className="mt-4 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-800">Enter your email and password.</p>}
           {params.error === 'service-unavailable' && <p role="alert" className="mt-4 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-800">Admin sign-in is temporarily unavailable. Try again shortly.</p>}
           {params.error === 'too-many-attempts' && <p role="alert" className="mt-4 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-800">Too many sign-in attempts. Wait 15 minutes and try again.</p>}

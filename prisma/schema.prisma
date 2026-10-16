@@ -162,6 +162,7 @@ model Charger {
   createdAt       DateTime       @default(now())
   updatedAt       DateTime       @updatedAt
   sessions        ChargingSession[]
+  momoPayments    MomoPayment[]
 }
 
 model ChargingSession {
@@ -250,6 +251,41 @@ model SupportTicket {
   message     String
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+}
+
+enum MomoPaymentStatus {
+  CREATED
+  REQUESTED
+  PAID
+  FAILED
+}
+
+// Mobile money payments for charging. Drivers pay without an account, so the payment is not linked to a customer.
+model MomoPayment {
+  id                     String            @id @default(cuid())
+  chargerId              String
+  charger                Charger           @relation(fields: [chargerId], references: [id])
+  phone                  String
+  amountRwf              Int
+  pricePerKwh            Float
+  energyEstimateKwh      Float
+  status                 MomoPaymentStatus @default(CREATED)
+  providerReference      String            @unique
+  providerReason         String?
+  financialTransactionId String?
+  createdAt              DateTime          @default(now())
+  updatedAt              DateTime          @updatedAt
+  paidAt                 DateTime?
+
+  @@index([chargerId])
+  @@index([phone, createdAt])
+}
+
+// Values the Control Center can change without a deploy, such as the support WhatsApp number.
+model SiteSetting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
 }
 
 model AuditLog {

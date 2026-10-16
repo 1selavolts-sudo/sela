@@ -77,7 +77,7 @@ export default async function AdminOverviewPage({ searchParams }: { searchParams
             <p className="mt-5 text-sm text-slate-600">No stations yet. Add your first station to see it here.</p>
           ) : (
             <div className="mt-5 overflow-hidden rounded-2xl border border-slate-200">
-              <table className="min-w-full text-left text-sm">
+              <table className="admin-table min-w-full text-left text-sm">
                 <thead className="bg-slate-50 text-slate-600">
                   <tr>
                     <th className="px-4 py-3">Station</th>
@@ -90,11 +90,11 @@ export default async function AdminOverviewPage({ searchParams }: { searchParams
                 <tbody>
                   {stations.map((station) => (
                     <tr key={station.id} className="border-t border-slate-200">
-                      <td className="px-4 py-3 font-semibold text-brand-navy">{station.name}</td>
-                      <td className="px-4 py-3 text-slate-600">{stationStatusLabels[station.status]}</td>
-                      <td className="px-4 py-3 text-slate-600">{station.chargers.length}</td>
-                      <td className="px-4 py-3 text-slate-600">{station.chargers.filter((c) => c.operationalStatus === 'AVAILABLE').length}</td>
-                      <td className="px-4 py-3 text-slate-600">{station.chargers.filter((c) => c.operationalStatus === 'CHARGING').length}</td>
+                      <td className="px-4 py-3 font-semibold text-brand-navy" data-label="Station">{station.name}</td>
+                      <td className="px-4 py-3 text-slate-600" data-label="Status">{stationStatusLabels[station.status]}</td>
+                      <td className="px-4 py-3 text-slate-600" data-label="Chargers">{station.chargers.length}</td>
+                      <td className="px-4 py-3 text-slate-600" data-label="Available">{station.chargers.filter((c) => c.operationalStatus === 'AVAILABLE').length}</td>
+                      <td className="px-4 py-3 text-slate-600" data-label="Charging">{station.chargers.filter((c) => c.operationalStatus === 'CHARGING').length}</td>
                     </tr>
                   ))}
                 </tbody>
